@@ -104,7 +104,7 @@ export default function ConfigScreen() {
         isVisible={detailsModal.isOpen}
         onClose={() => detailsModal.close()}
       >
-        {info?.description}
+        {info?.id}
       </InfoModal>
     </ThemedScrollView>
   );

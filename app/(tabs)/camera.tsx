@@ -55,8 +55,14 @@ export default function Camera() {
     scanned === false
       ? (scanningResult: BarcodeScanningResult) => {
           if (scanningResult.data !== null) {
+            console.log(scanningResult.data)
             toggleScanned();
-            router.push(`/${scanningResult.data}`);
+            router.navigate({
+              pathname: "/details/product/[barcode]",
+              params: {
+                barcode: scanningResult.data
+              }
+            });
           }
         }
       : undefined;

@@ -11,8 +11,7 @@ import {
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
 import { useCurrentUser } from "@/hooks/useCurrentUser";
-import { useEffect } from "react";
-import { Link, Stack, useRouter } from "expo-router";
+import { Link, useRouter } from "expo-router";
 import { Button } from "@/components/Button";
 import { productsDb } from "@/db/products";
 import { Feather } from "@expo/vector-icons";
@@ -53,7 +52,7 @@ export default function HomeScreen() {
               style={{
                 flex: 1,
               }}
-              onPress={() => router.navigate("/search")}
+              onPress={() => router.push("/details/search")}
             >
               <Text
                 style={{

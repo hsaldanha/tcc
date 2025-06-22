@@ -22,7 +22,7 @@ import {
 
 import { create } from "zustand";
 
-export default function ProductDetailsScreen() {
+export default function BarcodeScreen() {
   const search = useLocalSearchParams();
   const productQuery = useQuery(productQueryOptions(search.barcode as string));
 
@@ -276,7 +276,7 @@ function DiettaryPatternsAndRetrictions() {
 
   const taggedRestrictions = currentUser.profile?.restrictions.reduce(
     (tagged, restriction) => {
-      const dbRestriction = restrictionsDb.find((i) => i.id === restriction);
+      const dbRestriction = restrictionsDb?.find((i) => i.id === restriction);
       const ingredients = productQuery.data?.ingredients?.filter(
         (i) =>
           i.associatedWith?.find((asw) => asw.id === restriction) !== undefined
@@ -308,11 +308,11 @@ function DiettaryPatternsAndRetrictions() {
     );
   }
 
-  const restrictionDetails = restrictionsDb.find(
+  const restrictionDetails = restrictionsDb?.find(
     (i) => i.id === infoModal.restrictionId
   );
 
-  const taggedRestriction = taggedRestrictions.find(
+  const taggedRestriction = taggedRestrictions?.find(
     (i) => i.restrictionId === infoModal.restrictionId
   );
 
@@ -421,7 +421,7 @@ function DiettaryPatternsAndRetrictions() {
 
 function Tag({ restrictionId }: { restrictionId: number }) {
   const infoModal = useInfoModal();
-  const restriction = restrictionsDb.find((r) => r.id === restrictionId);
+  const restriction = restrictionsDb?.find((r) => r.id === restrictionId);
 
   return (
     <Pressable
