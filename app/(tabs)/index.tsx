@@ -9,7 +9,7 @@ import {
   Pressable,
 } from "react-native";
 import { ThemedText } from "@/components/ThemedText";
-import { ThemedView } from "@/components/ThemedView";
+import { ThemedScrollView, ThemedView } from "@/components/ThemedView";
 import { useCurrentUser } from "@/hooks/useCurrentUser";
 import { Link, useRouter } from "expo-router";
 import { Button } from "@/components/Button";
@@ -38,7 +38,7 @@ export default function HomeScreen() {
   // }, []);
 
   return (
-    <ThemedView style={styles.container}>
+    <ThemedScrollView style={styles.container}>
       <ThemedView style={styles.content}>
         <ThemedView style={styles.stepContainer}>
           <View
@@ -179,7 +179,15 @@ export default function HomeScreen() {
                   borderRadius: 6,
                 }}
               >
-                <View
+                <Pressable
+                  onPress={() => {
+                    router.navigate({
+                      pathname: "/details/product/[barcode]",
+                      params: {
+                        barcode: product.code,
+                      },
+                    });
+                  }}
                   style={{
                     overflow: "hidden",
                     backgroundColor: "white",
@@ -202,7 +210,7 @@ export default function HomeScreen() {
                       height: 60,
                     }}
                   />
-                </View>
+                </Pressable>
                 <View
                   style={{
                     flex: 1,
@@ -250,7 +258,7 @@ export default function HomeScreen() {
           </View>
         </ThemedView>
       </ThemedView>
-    </ThemedView>
+    </ThemedScrollView>
   );
 }
 

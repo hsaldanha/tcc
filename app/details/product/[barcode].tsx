@@ -10,7 +10,7 @@ import { useCurrentUser } from "@/hooks/useCurrentUser";
 import { productQueryOptions } from "@/queries/productQuery";
 import { Feather } from "@expo/vector-icons";
 import { useQuery } from "@tanstack/react-query";
-import { Stack, useLocalSearchParams } from "expo-router";
+import { Stack, useLocalSearchParams, useRouter } from "expo-router";
 import {
   ActivityIndicator,
   Image,
@@ -105,33 +105,35 @@ export default function BarcodeScreen() {
               </ThemedText>
               <View style={tableStyles.container}>
                 <View style={tableStyles.row}>
-                  <Text
+                  <ThemedText
                     style={[
                       tableStyles.col,
                       { flex: 2, borderRightWidth: 0, borderBottomWidth: 0 },
                     ]}
                   >
                     Tipo
-                  </Text>
-                  <Text
+                  </ThemedText>
+                  <ThemedText
                     style={[
                       tableStyles.col,
                       { borderRightWidth: 0, borderBottomWidth: 0 },
                     ]}
                   >
                     Valor
-                  </Text>
-                  <Text
+                  </ThemedText>
+                  <ThemedText
                     style={[
                       tableStyles.col,
                       { borderRightWidth: 0, borderBottomWidth: 0 },
                     ]}
                   >
                     Unid
-                  </Text>
-                  <Text style={[tableStyles.col, { borderBottomWidth: 0 }]}>
+                  </ThemedText>
+                  <ThemedText
+                    style={[tableStyles.col, { borderBottomWidth: 0 }]}
+                  >
                     %VD*
-                  </Text>
+                  </ThemedText>
                 </View>
                 {productQuery.data.nutritionFacts?.map((entry, index) => {
                   let isLastRow =
@@ -139,7 +141,7 @@ export default function BarcodeScreen() {
 
                   return (
                     <View key={entry.type} style={[tableStyles.row]}>
-                      <Text
+                      <ThemedText
                         style={[
                           tableStyles.col,
                           {
@@ -150,8 +152,8 @@ export default function BarcodeScreen() {
                         ]}
                       >
                         {entry.type}
-                      </Text>
-                      <Text
+                      </ThemedText>
+                      <ThemedText
                         style={[
                           tableStyles.col,
                           {
@@ -161,8 +163,8 @@ export default function BarcodeScreen() {
                         ]}
                       >
                         {entry.value}
-                      </Text>
-                      <Text
+                      </ThemedText>
+                      <ThemedText
                         style={[
                           tableStyles.col,
                           {
@@ -172,8 +174,8 @@ export default function BarcodeScreen() {
                         ]}
                       >
                         {entry.unit}
-                      </Text>
-                      <Text
+                      </ThemedText>
+                      <ThemedText
                         style={[
                           tableStyles.col,
                           {
@@ -182,7 +184,7 @@ export default function BarcodeScreen() {
                         ]}
                       >
                         {entry.dailyValue}
-                      </Text>
+                      </ThemedText>
                     </View>
                   );
                 })}
@@ -207,7 +209,7 @@ const tableStyles = StyleSheet.create({
   col: {
     flex: 1,
     borderWidth: 1,
-    borderColor: "#171717",
+    borderColor: "white",
     padding: 8,
   },
 });
@@ -322,7 +324,37 @@ function DiettaryPatternsAndRetrictions() {
         O produto contém componentes que podem ser prejudiciais a sua dieta e/ou
         saúde.
       </ThemedText>
-      {taggedRestrictions?.filter(
+      <ThemedView
+        style={{
+          paddingVertical: 12,
+          gap: 12,
+        }}
+      >
+        <ThemedView
+          style={{
+            flexDirection: "row",
+            gap: 6,
+          }}
+        >
+          <ThemedText
+            style={{
+              fontSize: 18,
+            }}
+          >
+            Restrições
+          </ThemedText>
+          <Feather color="white" size={22} name="info" />
+        </ThemedView>
+        <View
+          style={{
+            flexDirection: "row",
+            gap: 6,
+          }}
+        >
+          <Tag restrictionId={7} />
+        </View>
+      </ThemedView>
+      {/* {taggedRestrictions?.filter(
         (tr) => tr.restrictionType === "dietary-pattern"
       ).length > 0 ? (
         <ThemedView
@@ -345,7 +377,7 @@ function DiettaryPatternsAndRetrictions() {
             >
               Dieta
             </ThemedText>
-            <Feather size={22} name="info" />
+            <Feather color={"white"} size={22} name="info" />
           </Pressable>
           <View
             style={{
@@ -397,7 +429,7 @@ function DiettaryPatternsAndRetrictions() {
               ))}
           </View>
         </ThemedView>
-      ) : null}
+      ) : null} */}
       <InfoModal
         title={restrictionDetails?.name ?? "Detalhes"}
         isVisible={infoModal.restrictionId !== null}
@@ -420,12 +452,19 @@ function DiettaryPatternsAndRetrictions() {
 }
 
 function Tag({ restrictionId }: { restrictionId: number }) {
-  const infoModal = useInfoModal();
   const restriction = restrictionsDb?.find((r) => r.id === restrictionId);
+  const router = useRouter();
 
   return (
     <Pressable
-      onPress={() => infoModal.open(restrictionId)}
+      onPress={() => {
+        router.push({
+          pathname: "/details/restriction/[restrictionId]",
+          params: {
+            restrictionId: restrictionId,
+          },
+        });
+      }}
       style={({ pressed }) => ({
         backgroundColor: pressed ? "#fb2c36" : "#ff6467",
         paddingVertical: 4,

@@ -88,7 +88,12 @@ export function Carousel() {
 }
 
 type GalleryCarouselItemProps = {
-  item: { id: string, image: ImageProps["source"]; title: string };
+  item: {
+    id: string;
+    image: ImageProps["source"];
+    title: string;
+    description?: any;
+  };
   index: number;
   scrollXOffset: SharedValue<number>;
   handleCarouselItemPress: (scrollOffset: number) => void;
@@ -97,7 +102,7 @@ type GalleryCarouselItemProps = {
 
 const GalleryCarouselItem = (props: GalleryCarouselItemProps) => {
   const { item } = props;
-  const router = useRouter()
+  const router = useRouter();
 
   return (
     <Animated.View
@@ -109,14 +114,18 @@ const GalleryCarouselItem = (props: GalleryCarouselItemProps) => {
         overflow: "hidden",
       }}
     >
-      <Pressable onPress={() => {
-        router.push({
-          pathname: "/details/restriction/[restrictionId]",
-          params: {
-            restrictionId: item.id
+      <Pressable
+        onPress={() => {
+          if (item.description !== undefined) {
+            router.push({
+              pathname: "/details/restriction/[restrictionId]",
+              params: {
+                restrictionId: item.id,
+              },
+            });
           }
-        })
-      }}>
+        }}
+      >
         <ImageBackground
           blurRadius={1}
           source={item.image}

@@ -1,5 +1,6 @@
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedScrollView, ThemedView } from "@/components/ThemedView";
+import { restrictionsDb } from "@/db/diet";
 import { productsDb } from "@/db/products";
 import { Stack } from "expo-router";
 import { useState } from "react";
@@ -8,8 +9,16 @@ import { Image, TextInput, View } from "react-native";
 export default function SearchScreen() {
   const [search, onChangeText] = useState("");
 
-  const result = productsDb
+  const products = productsDb
     .filter((p) => p.name.toLowerCase().includes(search))
+    .slice(0, 3);
+
+  const restrictions = restrictionsDb
+    .filter(
+      (r) =>
+        r.name.toLowerCase().includes(search) ||
+        r.title?.toLowerCase().includes(search)
+    )
     .slice(0, 3);
 
   return (
@@ -69,8 +78,8 @@ export default function SearchScreen() {
                   gap: 12,
                 }}
               >
-                {result.length > 0 ? (
-                  result.map((product) => (
+                {products.length > 0 ? (
+                  products.map((product) => (
                     <ThemedView
                       key={product.id}
                       style={{
@@ -155,6 +164,7 @@ export default function SearchScreen() {
                 }}
               ></View>
             </View>
+
             <View
               style={{
                 gap: 12,
@@ -163,7 +173,14 @@ export default function SearchScreen() {
               <ThemedText style={{ fontSize: 18, fontWeight: 500 }}>
                 Restrições
               </ThemedText>
-              <ThemedText>Nenhum resultado encontrado.</ThemedText>
+
+              {restrictions?.length > 0 ? (
+                restrictions?.map((r) => (
+                  <ThemedText key={r.id}>{r.title}</ThemedText>
+                ))
+              ) : (
+                <ThemedText>Nenhum resultado encontrado</ThemedText>
+              )}
             </View>
             <View
               style={{
